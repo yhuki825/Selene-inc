@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>株式会社セレーン | SÉLÈNE Co., Ltd.</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            navy:      '#0B1120',
+                            navyMid:   '#111827',
+                            gold:      '#C9A84C',
+                            goldLight: '#F5E6C8',
+                            goldPale:  '#FAF3E0',
+                            slate:     '#1E293B',
+                            clay:      '#B89A72',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Shippori Mincho"', 'Georgia', 'serif'],
+                        sans:  ['"Inter"', '"Noto Sans JP"', 'sans-serif'],
+                    },
+                    letterSpacing: {
+                        ultra: '0.3em',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Shippori+Mincho:wght@400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        /* ========================================
+           Base & Typography
+        ======================================== */
+        *, *::before, *::after { box-sizing: border-box; }
+
+        ::selection {
+            background: #C9A84C;
+            color: #fff;
+        }
+
+        html { font-size: 16px; }
+
+        body {
+            background-color: #F9F7F4;
+            color: #0B1120;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ========================================
+           Scroll Reveal
+        ======================================== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+                        transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+
+        /* ========================================
+           Noise Texture Overlay
+        ======================================== */
+        .noise::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            opacity: 0.35;
+            mix-blend-mode: overlay;
+        }
+
+        /* ========================================
+           Hero
+        ======================================== */
+        .hero-bg {
+            background:
+                radial-gradient(ellipse 80% 60% at 70% 30%, rgba(201,168,76,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 80% at 10% 80%, rgba(184,154,114,0.07) 0%, transparent 55%),
+                linear-gradient(170deg, #0B1120 0%, #0F1A2E 50%, #0B1120 100%);
+        }
+
+        /* Animated gradient line */
+        @keyframes lineSlide {
+            0%   { transform: scaleX(0); transform-origin: left; }
+            50%  { transform: scaleX(1); transform-origin: left; }
+            51%  { transform: scaleX(1); transform-origin: right; }
+            100% { transform: scaleX(0); transform-origin: right; }
+        }
+        .line-anim {
+            animation: lineSlide 4s ease-in-out infinite;
+        }
+
+        /* Floating glow orb */
+        @keyframes floatOrb {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50%       { transform: translateY(-20px) scale(1.05); }
+        }
+        .float-orb {
+            animation: floatOrb 8s ease-in-out infinite;
+        }
+
+        /* Slow pulse for decorative elements */
+        @keyframes slowPulse {
+            0%, 100% { opacity: 0.4; }
+            50%       { opacity: 0.8; }
+        }
+        .slow-pulse { animation: slowPulse 5s ease-in-out infinite; }
+
+        /* ========================================
+           Gold Divider
+        ======================================== */
+        .gold-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .gold-divider::before,
+        .gold-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #C9A84C, transparent);
+        }
+
+        /* ========================================
+           Service Cards
+        ======================================== */
+        .service-card {
+            position: relative;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 1.5rem;
+            overflow: hidden;
+            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                        box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                        border-color 0.4s ease;
+        }
+        .service-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 30px 60px -10px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,168,76,0.3);
+            border-color: rgba(201,168,76,0.35);
+        }
+        .service-card .card-img {
+            transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .service-card:hover .card-img {
+            transform: scale(1.06);
+        }
+
+        /* ========================================
+           Company Table
+        ======================================== */
+        .info-row {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 1rem;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid #F0EBE3;
+            align-items: baseline;
+        }
+        .info-row:last-child { border-bottom: none; }
+
+        /* ========================================
+           Scrollbar
+        ======================================== */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #0B1120; }
+        ::-webkit-scrollbar-thumb { background: #C9A84C; border-radius: 2px; }
+
+        /* ========================================
+           Back to Top
+        ======================================== */
+        #back-to-top {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease, background-color 0.3s ease;
+        }
+        #back-to-top.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* ========================================
+           Mobile Menu
+        ======================================== */
+        #mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        #mobile-menu.open {
+            max-height: 300px;
+        }
+    </style>
+</head>
+
+<!-- ============================================================
+     BODY
+============================================================ -->
+<body>
+
+<!-- ============================================================
+     HEADER
+============================================================ -->
+<header id="main-header"
+        class="fixed top-0 left-0 w-full z-50 transition-all duration-500">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
+
+        <!-- Logo -->
+        <a href="#" class="flex flex-col group">
+            <span class="font-serif text-2xl tracking-[0.18em] font-bold text-brand-navy flex items-center gap-1 group-hover:text-brand-gold transition-colors duration-300">
+                SÉLÈNE
+                <span class="text-[7px] text-brand-gold align-super leading-none">◆</span>
+            </span>
+            <span class="text-[9px] tracking-[0.22em] text-gray-400 uppercase mt-0.5">株式会社セレーン</span>
+        </a>
+
+        <!-- Desktop Nav -->
+        <nav class="hidden md:flex items-center gap-10 text-[11px] tracking-[0.2em] uppercase font-medium text-brand-navy/70">
+            <a href="#concept"  class="relative py-1 hover:text-brand-gold transition-colors duration-300 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full">Concept</a>
+            <a href="#services" class="relative py-1 hover:text-brand-gold transition-colors duration-300 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full">Services</a>
+            <a href="#company"  class="relative py-1 hover:text-brand-gold transition-colors duration-300 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full">Company</a>
+        </nav>
+
+        <!-- Mobile Toggle -->
+        <button id="mobile-menu-btn"
+                class="md:hidden w-10 h-10 flex flex-col justify-center items-center gap-[5px] focus:outline-none"
+                aria-label="メニューを開く">
+            <span class="menu-bar w-6 h-px bg-brand-navy transition-all duration-300"></span>
+            <span class="menu-bar w-4 h-px bg-brand-navy transition-all duration-300 self-end"></span>
+            <span class="menu-bar w-6 h-px bg-brand-navy transition-all duration-300"></span>
+        </button>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div id="mobile-menu" class="md:hidden bg-white/98 backdrop-blur-xl border-b border-gray-100 overflow-hidden">
+        <nav class="flex flex-col px-8 py-6 gap-5 text-[11px] tracking-[0.2em] uppercase font-medium text-brand-navy/80">
+            <a href="#concept"  class="mobile-link py-2 border-b border-gray-100 hover:text-brand-gold transition-colors">Concept</a>
+            <a href="#services" class="mobile-link py-2 border-b border-gray-100 hover:text-brand-gold transition-colors">Services</a>
+            <a href="#company"  class="mobile-link py-2 hover:text-brand-gold transition-colors">Company</a>
+        </nav>
+    </div>
+</header>
+
+
+<!-- ============================================================
+     HERO
+============================================================ -->
+<section class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden hero-bg noise text-white">
+
+    <!-- Decorative orbs -->
+    <div class="absolute -top-32 -right-32 w-[600px] h-[600px] rounded-full bg-brand-gold/[0.06] blur-[100px] float-orb pointer-events-none"></div>
+    <div class="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full bg-brand-clay/[0.05] blur-[120px] pointer-events-none"></div>
+
+    <!-- Geometric crystal SVG -->
+    <svg class="absolute bottom-12 right-10 w-[420px] h-[420px] opacity-[0.06] pointer-events-none slow-pulse"
+         viewBox="0 0 200 200" fill="none" stroke="#C9A84C" stroke-width="0.4">
+        <polygon points="100,10 180,55 180,145 100,190 20,145 20,55"/>
+        <polygon points="100,30 160,62 160,138 100,170 40,138 40,62"/>
+        <line x1="100" y1="10" x2="100" y2="190"/>
+        <line x1="20"  y1="55" x2="180" y2="145"/>
+        <line x1="180" y1="55" x2="20"  y2="145"/>
+        <circle cx="100" cy="100" r="50"/>
+        <circle cx="100" cy="100" r="25"/>
+    </svg>
+
+    <!-- Horizontal thin lines (decorative) -->
+    <div class="absolute left-0 top-1/3 w-full h-px bg-gradient-to-r from-transparent via-brand-gold/10 to-transparent pointer-events-none"></div>
+    <div class="absolute left-0 top-2/3 w-full h-px bg-gradient-to-r from-transparent via-brand-gold/5 to-transparent pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 py-24 relative z-10 w-full grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+
+        <!-- Left: Text -->
+        <div class="lg:col-span-7 space-y-10 text-center lg:text-left">
+
+            <!-- Badge -->
+            <div class="inline-flex items-center gap-2.5 bg-white/5 border border-brand-gold/20 px-5 py-2 rounded-full backdrop-blur-sm">
+                <span class="w-1.5 h-1.5 rounded-full bg-brand-gold animate-ping"></span>
+                <span class="text-[10px] tracking-[0.28em] uppercase font-semibold text-brand-gold/90">Aesthetic &amp; Mineral Innovation</span>
+            </div>
+
+            <!-- Headline -->
+            <h1 class="font-serif text-[2.6rem] sm:text-5xl lg:text-[3.6rem] tracking-[0.08em] leading-[1.25] text-white">
+                美を科学し、<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-gold via-[#F0D898] to-brand-clay">自然の結晶</span>を届ける。
+            </h1>
+
+            <!-- Animated gold line -->
+            <div class="flex justify-center lg:justify-start">
+                <div class="w-24 h-px bg-brand-gold line-anim"></div>
+            </div>
+
+            <!-- Body -->
+            <p class="text-gray-300/90 text-sm sm:text-[0.95rem] tracking-wider leading-[2] max-w-xl mx-auto lg:mx-0 font-light">
+                株式会社セレーンは、先進テクノロジーを結集した業務用美容機器・最高峰の美容商材の卸販売、そして地球深部から湧き出る神秘的な鉱物のご提案を通じ、サロンビジネスの付加価値と永続的な美を創造します。
+            </p>
+
+            <!-- Scroll hint -->
+            <div class="flex justify-center lg:justify-start items-center gap-4 text-brand-gold/50 text-[10px] tracking-[0.25em] uppercase pt-4">
+                <span class="w-10 h-px bg-brand-gold/30"></span>
+                <span>Scroll to Discover</span>
+                <i class="fa-solid fa-chevron-down text-[8px] animate-bounce"></i>
+            </div>
+        </div>
+
+        <!-- Right: Visual -->
+        <div class="lg:col-span-5 flex justify-center lg:justify-end relative">
+
+            <!-- Main image frame -->
+            <div class="relative w-72 sm:w-80 lg:w-[340px]">
+                <!-- Outer gold border accent -->
+                <div class="absolute -inset-3 rounded-[2.5rem] border border-brand-gold/20 rounded-t-[9rem]"></div>
+                <!-- Image container -->
+                <div class="relative w-full aspect-[3/4] rounded-t-[8rem] rounded-b-[1.5rem] overflow-hidden shadow-[0_40px_80px_-10px_rgba(0,0,0,0.6)] border border-brand-gold/25">
+                    <img src="https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?q=80&w=1000&auto=format&fit=crop"
+                         alt="先進ビューティーとクリスタルの融合イメージ"
+                         class="w-full h-full object-cover brightness-90 transition-transform duration-[10s] hover:scale-105"
+                         onerror="this.src='https://images.unsplash.com/photo-1515377905703-c4788e51af15?q=80&w=1000&auto=format&fit=crop';">
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand-navy/70 via-transparent to-transparent"></div>
+                </div>
+
+                <!-- Floating accent card -->
+                <div class="absolute -bottom-8 -left-8 bg-white/8 backdrop-blur-xl border border-white/10 p-5 rounded-2xl hidden sm:block max-w-[200px] shadow-2xl">
+                    <div class="text-brand-gold text-xl mb-2"><i class="fa-solid fa-gem"></i></div>
+                    <div class="text-xs font-serif font-semibold tracking-wider text-white leading-snug">Pure Minerals &amp; Technology</div>
+                    <div class="text-[10px] text-gray-400 mt-1.5 leading-relaxed">地球の叡智である鉱物と、美を導くテクノロジー。</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ============================================================
+     CONCEPT
+============================================================ -->
+<section id="concept" class="py-28 sm:py-36 bg-[#F9F7F4] relative overflow-hidden">
+
+    <!-- Subtle dot grid -->
+    <div class="absolute inset-0 opacity-40 pointer-events-none"
+         style="background-image: radial-gradient(circle, #C9A84C22 1px, transparent 1px); background-size: 40px 40px;"></div>
+
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 relative z-10">
+
+        <!-- Section label -->
+        <div class="text-center mb-20 reveal">
+            <span class="text-brand-gold text-[10px] tracking-[0.35em] font-semibold uppercase block mb-3">Philosophy</span>
+            <h2 class="font-serif text-3xl sm:text-4xl tracking-[0.1em] text-brand-navy leading-snug">
+                自然界のエネルギーと<br>サイエンスの融合。
+            </h2>
+            <div class="gold-divider max-w-xs mx-auto mt-6">
+                <span class="text-brand-gold text-[8px] tracking-widest">◆</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+
+            <!-- Image column -->
+            <div class="lg:col-span-5 order-2 lg:order-1 reveal">
+                <div class="relative">
+                    <!-- Gold border offset -->
+                    <div class="absolute -top-5 -left-5 w-full h-full border border-brand-gold/30 rounded-3xl -z-10"></div>
+                    <!-- Primary image -->
+                    <div class="rounded-3xl overflow-hidden shadow-2xl aspect-[4/5]">
+                        <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1000&auto=format&fit=crop"
+                             alt="美しさと鉱物の神秘性"
+                             class="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                             onerror="this.src='https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000&auto=format&fit=crop';">
+                    </div>
+                    <!-- Secondary image -->
+                    <div class="absolute -bottom-8 -right-8 w-44 h-44 rounded-2xl overflow-hidden shadow-2xl border-4 border-white hidden md:block">
+                        <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=600&auto=format&fit=crop"
+                             alt="サロン品質の美容商材"
+                             class="w-full h-full object-cover"
+                             onerror="this.src='https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?q=80&w=600&auto=format&fit=crop';">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Text column -->
+            <div class="lg:col-span-7 order-1 lg:order-2 space-y-10 reveal reveal-delay-2">
+
+                <p class="text-gray-600 text-sm sm:text-[0.95rem] leading-[2.1] tracking-wider font-light">
+                    「セレーン（Sélène）」という名は、満ち欠けによって常に姿を変えながら、変わらぬ純真な光を放ち続ける「月」に由来しています。私たちは、人々が本来持つ多様な美しさをさらに高め、輝かせるサポートをいたします。
+                </p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+                    <!-- Card 1 -->
+                    <div class="group p-7 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-brand-gold/30 transition-all duration-500 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-brand-gold to-brand-clay rounded-l-2xl"></div>
+                        <div class="pl-2">
+                            <span class="text-[10px] tracking-[0.25em] text-brand-gold font-semibold uppercase block mb-3">01</span>
+                            <h3 class="font-serif text-base font-bold text-brand-navy tracking-wider mb-3 leading-snug">先端技術による<br>アプローチ</h3>
+                            <p class="text-xs text-gray-500 leading-relaxed font-light">
+                                結果主義のサロン経営をバックアップするために、安全性と高い効果を兼ね備えた業務用美容機器と専門性の高い商材を厳選してお届けします。
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="group p-7 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-brand-clay/30 transition-all duration-500 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-brand-clay to-brand-gold rounded-l-2xl"></div>
+                        <div class="pl-2">
+                            <span class="text-[10px] tracking-[0.25em] text-brand-clay font-semibold uppercase block mb-3">02</span>
+                            <h3 class="font-serif text-base font-bold text-brand-navy tracking-wider mb-3 leading-snug">大地の結晶が生む<br>心地よさ</h3>
+                            <p class="text-xs text-gray-500 leading-relaxed font-light">
+                                地球の深部で幾星霜もの時間を経て形成される鉱物（天然石）には、自然の波長が宿ります。空間演出や美容施術への親和性を追求し、価値の高い原石をご提案します。
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ============================================================
+     SERVICES
+============================================================ -->
+<section id="services" class="py-28 sm:py-36 bg-brand-navy relative overflow-hidden noise">
+
+    <!-- Background glow -->
+    <div class="absolute top-1/3 left-1/4 w-[500px] h-[500px] rounded-full bg-brand-clay/[0.07] blur-[150px] pointer-events-none"></div>
+    <div class="absolute bottom-0 right-0 w-[600px] h-[600px] rounded-full bg-brand-gold/[0.04] blur-[180px] pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 relative z-10">
+
+        <!-- Section header -->
+        <div class="text-center space-y-4 max-w-2xl mx-auto mb-20 reveal">
+            <span class="text-brand-gold text-[10px] tracking-[0.35em] font-semibold uppercase block">Business Domain</span>
+            <h2 class="font-serif text-3xl sm:text-4xl tracking-[0.08em] text-white leading-snug">
+                美を多角的にプロデュースする<br>4つの事業領域
+            </h2>
+            <div class="gold-divider max-w-xs mx-auto mt-6">
+                <span class="text-brand-gold text-[8px]">◆</span>
+            </div>
+        </div>
+
+        <!-- Services grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
+
+            <!-- Service 1 -->
+            <div class="service-card reveal reveal-delay-1 flex flex-col">
+                <div class="aspect-[16/9] overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=1000&auto=format&fit=crop"
+                         alt="業務用美容機器"
+                         class="card-img w-full h-full object-cover"
+                         onerror="this.src='https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?q=80&w=1000&auto=format&fit=crop';">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent"></div>
+                    <span class="absolute bottom-4 left-6 text-brand-gold text-[10px] tracking-[0.25em] font-serif font-semibold uppercase">01 / Aesthetic Equipment</span>
+                </div>
+                <div class="p-8 flex flex-col flex-1">
+                    <h3 class="font-serif text-xl sm:text-2xl font-semibold tracking-wider text-white mb-4">業務用美容機器</h3>
+                    <p class="text-gray-400 text-xs sm:text-sm leading-relaxed tracking-wide font-light flex-1">
+                        エステサロン、スパ、クリニック向けの高機能・高品質な美容機器を取り扱っております。脱毛機、痩身機、美顔器など、最先端のサイエンスに基づく結果追求型のマシンを厳選し、導入支援から技術指導までワンストップでサポートします。
+                    </p>
+                    <ul class="mt-6 pt-5 border-t border-white/8 space-y-2 text-[11px] text-brand-gold/80 tracking-wide">
+                        <li class="flex items-center gap-2.5">
+                            <span class="w-1 h-1 rounded-full bg-brand-gold flex-shrink-0"></span>
+                            最先端テクノロジーによる高結果アプローチ
+                        </li>
+                        <li class="flex items-center gap-2.5">
+                            <span class="w-1 h-1 rounded-full bg-brand-gold flex-shrink-0"></span>
+                            万全のメンテナンス・インストラクション
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Service 2 -->
+            <div class="service-card reveal reveal-delay-2 flex flex-col">
+                <div class="aspect-[16/9] overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1617897903246-719242758050?q=80&w=1000&auto=format&fit=crop"
+                         alt="美容商材・卸販売"
+                         class="card-img w-full h-full object-cover"
+                         onerror="this.src='https://images.unsplash.com/photo-1608248597481-496100c8c836?q=80&w=1000&auto=format&fit=crop';">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent"></div>
+                    <span class="absolute bottom-4 left-6 text-brand-gold text-[10px] tracking-[0.25em] font-serif font-semibold uppercase">02 / Products &amp; Wholesale</span>
+                </div>
+                <div class="p-8 flex flex-col flex-1">
+                    <h3 class="font-serif text-xl sm:text-2xl font-semibold tracking-wider text-white mb-4">美容商材・卸販売</h3>
+                    <p class="text-gray-400 text-xs sm:text-sm leading-relaxed tracking-wide font-light flex-1">
+                        日々の施術に欠かせない基礎化粧品から消耗品まで、厳格な品質基準を満たした高品質な商材を幅広くラインナップ。サロン経営に合わせた効果的な製品ポートフォリオの構築と、収益性を考慮した卸販売スキームをご提供します。
+                    </p>
+                    <ul class="mt-6 pt-5 border-t border-white/8 space-y-2 text-[11px] text-brand-gold/80 tracking-wide">
+                        <li class="flex items-center gap-2.5">
+                            <span class="w-1 h-1 rounded-full bg-brand-gold flex-shrink-0"></span>
+                            プロ仕様のサロン専用コスメライン
+                        </li>
+                        <li class="flex items-center gap-2.5">
+                            <span class="w-1 h-1 rounded-full bg-brand-gold flex-shrink-0"></span>
+                            サロン運営を安定させる最適な仕入れシステム
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Service 3 -->
+            <div class="service-card reveal reveal-delay-3 flex flex-col">
+                <div class="aspect-[16/9] overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=1000&auto=format&fit=crop"
+                         alt="鉱物・天然石販売"
+                         class="card-img w-full h-full object-cover"
+                         onerror="this.src='https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=1000&auto=format&fit=crop';">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent"></div>
+                    <span class="absolute bottom-4 left-6 text-brand-clay text-[10px] tracking-[0.25em] font-serif font-semibold uppercase">03 / Minerals &amp; Crystals</span>
+                </div>
+                <div class="p-8 flex flex-col flex-1">
+                    <h3 class="font-serif text-xl sm:text-2xl font-semibold tracking-wider text-white mb-4">鉱物販売</h3>
+                    <p class="text-gray-400 text-xs sm:text-sm leading-relaxed tracking-wide font-light flex-1">
+                        地球からの美しい贈り物である天然鉱物・原石・パワーストーン。ヒーリング効果を高めるサロン空間の演出用オブジェとして、または美容オイルや特別な施術と組み合わせるクリスタル・セラピーのツールとして、厳選された一品をご提案します。
+                    </p>
+                    <ul class="mt-6 pt-5 border-t border-white/8 space-y-2 text-[11px] text-brand-clay/80 tracking-wide">
+                        <li class="flex items-center gap-2.5">
+                            <span class="w-1 h-1 rounded-full bg-brand-clay flex-shrink-0"></span>
+                            世界中から厳選された高品質な鉱物・クラスター
+                        </li>
+                        <li class="flex items-center gap-2.5">
+                            <span class="w-1 h-1 rounded-full bg-brand-clay flex-shrink-0"></span>
+                            空間波動を高めるヒーリングディスプレイの提案
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Service 4 -->
+            <div class="service-card reveal reveal-delay-4 flex flex-col">
+                <div class="aspect-[16/9] overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000&auto=format&fit=crop"
+                         alt="総合プロデュース"
+                         class="card-img w-full h-full object-cover"
+                         onerror="this.src='https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=1000&auto=format&fit=crop';">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent"></div>
+                    <span class="absolute bottom-4 left-6 text-brand-gold text-[10px] tracking-[0.25em] font-serif font-semibold uppercase">04 / Integrated Solutions</span>
+                </div>
+                <div class="p-8 flex flex-col flex-1">
+                    <h3 class="font-serif text-xl sm:text-2xl font-semibold tracking-wider text-white mb-4">総合卸売・コンサルティングサポート</h3>
+                    <p class="text-gray-400 text-xs sm:text-sm leading-relaxed tracking-wide font-light flex-1">
+                        機械、商材、そして空間づくりの鉱物。セレーンが誇る3つのアセットを組み合わせ、サロンのブランド力アップ、独自の施術メニュー開発、新規開業のトータルパッケージ提案を行います。他サロンとの絶対的な差別化を実現します。
+                    </p>
+                    <ul class="mt-6 pt-5 border-t border-white/8 space-y-2 text-[11px] text-brand-gold/80 tracking-wide">
+                        <li class="flex items-center gap-2.5">
+                            <span class="w-1 h-1 rounded-full bg-brand-gold flex-shrink-0"></span>
+                            サロン開業・リブランディングの統合支援
+                        </li>
+                        <li class="flex items-center gap-2.5">
+                            <span class="w-1 h-1 rounded-full bg-brand-gold flex-shrink-0"></span>
+                            機器から商材、空間演出まで一気通貫のご提案
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ============================================================
+     COMPANY
+============================================================ -->
+<section id="company" class="py-28 sm:py-36 bg-[#F9F7F4] relative overflow-hidden">
+
+    <!-- Subtle dot grid -->
+    <div class="absolute inset-0 opacity-30 pointer-events-none"
+         style="background-image: radial-gradient(circle, #C9A84C1A 1px, transparent 1px); background-size: 40px 40px;"></div>
+
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 relative z-10">
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+
+            <!-- Left: Title -->
+            <div class="lg:col-span-4 space-y-5 reveal">
+                <span class="text-brand-gold text-[10px] tracking-[0.35em] font-semibold uppercase block">About Us</span>
+                <h2 class="font-serif text-3xl tracking-[0.1em] text-brand-navy leading-snug">
+                    会社概要
+                </h2>
+                <div class="w-10 h-px bg-brand-gold"></div>
+                <p class="text-xs text-gray-500 tracking-wider leading-relaxed font-light max-w-xs">
+                    株式会社セレーンは、お客様一人ひとりの信頼に技術と高品質な製品で応え、美と調和に貢献いたします。
+                </p>
+            </div>
+
+            <!-- Right: Info table + map image -->
+            <div class="lg:col-span-8 space-y-10 reveal reveal-delay-2">
+
+                <!-- Info table card -->
+                <div class="bg-white rounded-3xl p-8 sm:p-10 shadow-lg shadow-brand-navy/5 border border-gray-100/80">
+                    <dl>
+
+                        <div class="info-row">
+                            <dt class="text-[11px] tracking-[0.2em] uppercase font-semibold text-brand-navy/50">会社名</dt>
+                            <dd class="font-serif text-brand-navy text-lg font-bold tracking-wider">株式会社セレーン</dd>
+                        </div>
+
+                        <div class="info-row">
+                            <dt class="text-[11px] tracking-[0.2em] uppercase font-semibold text-brand-navy/50">代表者</dt>
+                            <dd class="text-brand-navy font-semibold tracking-wider">
+                                <span class="font-serif text-lg">金丸 美保</span>
+                                <span class="text-[10px] text-gray-400 ml-2 font-normal">Miho Kanamaru</span>
+                            </dd>
+                        </div>
+
+                        <div class="info-row">
+                            <dt class="text-[11px] tracking-[0.2em] uppercase font-semibold text-brand-navy/50">所在地</dt>
+                            <dd class="text-brand-navy/80 text-sm leading-relaxed font-light tracking-wider">
+                                〒655-0882<br>
+                                兵庫県神戸市垂水区乙木３丁目1−20−301
+                            </dd>
+                        </div>
+
+                        <div class="info-row">
+                            <dt class="text-[11px] tracking-[0.2em] uppercase font-semibold text-brand-navy/50">事業内容</dt>
+                            <dd class="text-brand-navy/80 text-sm leading-relaxed font-light tracking-wider">
+                                業務用美容機器、美容商材、卸販売、鉱物販売
+                            </dd>
+                        </div>
+
+                    </dl>
+                </div>
+
+                <!-- Location image banner -->
+                <div class="relative rounded-3xl overflow-hidden h-56 sm:h-64 shadow-lg border border-gray-100">
+                    <img src="https://images.unsplash.com/photo-1542051841857-5f90071e7989?q=80&w=1200&auto=format&fit=crop"
+                         alt="神戸の洗練された街並みイメージ"
+                         class="w-full h-full object-cover brightness-50"
+                         onerror="this.src='https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=1200&auto=format&fit=crop';">
+                    <div class="absolute inset-0 bg-gradient-to-r from-brand-navy/60 to-transparent"></div>
+                    <div class="absolute inset-0 flex flex-col justify-end p-8 text-white">
+                        <span class="text-[10px] tracking-[0.3em] uppercase text-brand-gold font-bold mb-1">Kobe, Hyogo</span>
+                        <h3 class="font-serif text-xl tracking-wider leading-snug">神戸 垂水から、最上の美を全国へ</h3>
+                        <p class="text-[11px] text-gray-300 tracking-wider mt-2 font-light">美と港の街、神戸・垂水区を拠点に事業を展開しております。</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer class="bg-brand-navy text-white relative overflow-hidden">
+
+    <!-- Top gold line -->
+    <div class="w-full h-px bg-gradient-to-r from-transparent via-brand-gold/40 to-transparent"></div>
+
+    <!-- Glow orb -->
+    <div class="absolute bottom-0 right-0 w-96 h-96 rounded-full bg-brand-gold/5 blur-[100px] pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 relative z-10 py-16">
+
+        <!-- Top row -->
+        <div class="flex flex-col md:flex-row items-center justify-between gap-10 pb-12 border-b border-white/8">
+
+            <!-- Brand -->
+            <div class="text-center md:text-left space-y-2">
+                <span class="font-serif text-3xl tracking-[0.18em] font-bold text-white flex items-center justify-center md:justify-start gap-1">
+                    SÉLÈNE
+                    <span class="text-[7px] text-brand-gold align-super">◆</span>
+                </span>
+                <p class="text-gray-500 text-[10px] tracking-[0.22em] uppercase">株式会社セレーン | SÉLÈNE Co., Ltd.</p>
+            </div>
+
+            <!-- Nav -->
+            <nav class="flex flex-wrap justify-center gap-x-10 gap-y-3 text-[11px] tracking-[0.2em] uppercase font-medium text-gray-500">
+                <a href="#concept"  class="hover:text-brand-gold transition-colors duration-300">Concept</a>
+                <a href="#services" class="hover:text-brand-gold transition-colors duration-300">Services</a>
+                <a href="#company"  class="hover:text-brand-gold transition-colors duration-300">Company</a>
+            </nav>
+        </div>
+
+        <!-- Bottom row -->
+        <div class="flex flex-col md:flex-row items-center justify-between pt-8 gap-4 text-center md:text-left">
+            <p class="text-[11px] text-gray-600 tracking-wider leading-relaxed max-w-lg">
+                本Webサイトは株式会社セレーンのサービス紹介ページです。お取引や取扱い品目の詳細は、担当営業までお尋ねください。
+            </p>
+            <p class="text-[11px] text-gray-600 tracking-wider whitespace-nowrap">&copy; 2026 SÉLÈNE Co., Ltd. All Rights Reserved.</p>
+        </div>
+
+    </div>
+</footer>
+
+
+<!-- ============================================================
+     BACK TO TOP
+============================================================ -->
+<a href="#" id="back-to-top"
+   class="fixed bottom-8 right-8 z-50 w-12 h-12 rounded-full flex items-center justify-center bg-brand-gold/90 hover:bg-brand-gold text-white shadow-lg shadow-brand-gold/30 transition-all duration-300 hover:scale-110"
+   aria-label="ページ最上部へ戻る">
+    <i class="fa-solid fa-arrow-up text-xs"></i>
+</a>
+
+
+<!-- ============================================================
+     JAVASCRIPT
+============================================================ -->
+<script>
+    /* ----------------------------------------
+       1. Header: scroll effect & color swap
+    ---------------------------------------- */
+    const header = document.getElementById('main-header');
+
+    function updateHeader() {
+        if (window.scrollY > 60) {
+            header.classList.add('bg-white/95', 'backdrop-blur-xl', 'shadow-md', 'shadow-brand-navy/5', 'border-b', 'border-gray-100/80');
+            // Switch logo/nav to dark on white bg
+            header.querySelectorAll('nav a').forEach(a => a.classList.add('text-brand-navy/70'));
+        } else {
+            header.classList.remove('bg-white/95', 'backdrop-blur-xl', 'shadow-md', 'shadow-brand-navy/5', 'border-b', 'border-gray-100/80');
+        }
+    }
+    window.addEventListener('scroll', updateHeader, { passive: true });
+    updateHeader();
+
+    /* ----------------------------------------
+       2. Mobile menu toggle
+    ---------------------------------------- */
+    const menuBtn   = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const bars      = menuBtn.querySelectorAll('.menu-bar');
+
+    menuBtn.addEventListener('click', () => {
+        const isOpen = mobileMenu.classList.toggle('open');
+        // Animate hamburger → X
+        if (isOpen) {
+            bars[0].style.transform = 'translateY(6px) rotate(45deg)';
+            bars[1].style.opacity   = '0';
+            bars[2].style.transform = 'translateY(-6px) rotate(-45deg)';
+        } else {
+            bars[0].style.transform = '';
+            bars[1].style.opacity   = '';
+            bars[2].style.transform = '';
+        }
+    });
+
+    document.querySelectorAll('.mobile-link').forEach(link => {
+        link.addEventListener('click', () => {
+            mobileMenu.classList.remove('open');
+            bars[0].style.transform = '';
+            bars[1].style.opacity   = '';
+            bars[2].style.transform = '';
+        });
+    });
+
+    /* ----------------------------------------
+       3. Scroll reveal
+    ---------------------------------------- */
+    const reveals = document.querySelectorAll('.reveal');
+
+    function revealOnScroll() {
+        const trigger = window.innerHeight * 0.88;
+        reveals.forEach(el => {
+            if (el.getBoundingClientRect().top < trigger) {
+                el.classList.add('active');
+            }
+        });
+    }
+
+    window.addEventListener('scroll', revealOnScroll, { passive: true });
+    window.addEventListener('DOMContentLoaded', () => setTimeout(revealOnScroll, 80));
+
+    /* ----------------------------------------
+       4. Back to top button visibility
+    ---------------------------------------- */
+    const backToTop = document.getElementById('back-to-top');
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 400) {
+            backToTop.classList.add('visible');
+        } else {
+            backToTop.classList.remove('visible');
+        }
+    }, { passive: true });
+</script>
+
+</body>
+</html>
